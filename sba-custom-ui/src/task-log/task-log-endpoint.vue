@@ -16,27 +16,27 @@
 
 <template>
   <div class="task-log">
-    <iframe src="/static/task-log.html" style="width: 100%;height: 100%"></iframe>
-<!--    <iframe src="https://console.suxiniot.com/weld/bulletin-board/"></iframe>-->
-<!--    <el-table
-        :data="tableData"
-        border
-        style="width: 100%">
-      <el-table-column
-          prop="date"
-          label="日期"
-          width="180">
-      </el-table-column>
-      <el-table-column
-          prop="name"
-          label="姓名"
-          width="180">
-      </el-table-column>
-      <el-table-column
-          prop="address"
-          label="地址">
-      </el-table-column>
-    </el-table>-->
+    <iframe :src="iframeUrl" style="width: 100%;height: 100%"></iframe>
+    <!--    <iframe src="https://console.suxiniot.com/weld/bulletin-board/"></iframe>-->
+    <!--    <el-table
+            :data="tableData"
+            border
+            style="width: 100%">
+          <el-table-column
+              prop="date"
+              label="日期"
+              width="180">
+          </el-table-column>
+          <el-table-column
+              prop="name"
+              label="姓名"
+              width="180">
+          </el-table-column>
+          <el-table-column
+              prop="address"
+              label="地址">
+          </el-table-column>
+        </el-table>-->
   </div>
 </template>
 
@@ -52,36 +52,14 @@ export default {
     }
   },
   data: () => ({
-    taskLogs: {},
-    condition: {},
-    pageArgs: {
-      total: 0,
-      pageNum: 1,
-      pageSize: 13
-    },
-    tableData: [{
-      date: '2016-05-02',
-      name: '王小虎',
-      address: '上海市普陀区金沙江路 1518 弄'
-    }, {
-      date: '2016-05-04',
-      name: '王小虎',
-      address: '上海市普陀区金沙江路 1517 弄'
-    }, {
-      date: '2016-05-01',
-      name: '王小虎',
-      address: '上海市普陀区金沙江路 1519 弄'
-    }, {
-      date: '2016-05-03',
-      name: '王小虎',
-      address: '上海市普陀区金沙江路 1516 弄'
-    }]
+    serviceUrl: '',
   }),
   async created() {
     // await this.getThreadPool();
     // setInterval(this.getThreadPool, 1000)
   },
   mounted() {
+    this.serviceUrl = this.instance.registration.serviceUrl;
   },
   methods: {
     async getThreadPool() {
@@ -99,12 +77,17 @@ export default {
       this.taskLogs = response.data;
     }
   },
+  computed: {
+    iframeUrl() {
+      return `/static/task-log.html?serviceUrl=${encodeURIComponent(this.serviceUrl)}`
+    }
+  },
 };
 </script>
 
 <style>
 .task-log {
-  //padding: 10px;
+//padding: 10px;
   padding: 3rem 1.5rem;
   width: 100%;
   height: 100%;

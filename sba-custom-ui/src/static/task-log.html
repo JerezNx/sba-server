@@ -141,12 +141,30 @@
         return `${year}-${month}-${day}`;
     }
 
+    function getUrlParam(url, paramName) {
+        const urlParts = url.split('?');
+        if (urlParts.length <= 1) {
+            return undefined;
+        }
+
+        const queryString = urlParts[1];
+        const paramPairs = queryString.split('&');
+        for (let i = 0; i < paramPairs.length; i++) {
+            const [key, value] = paramPairs[i].split('=');
+            if (key === paramName) {
+                return decodeURIComponent(value);
+            }
+        }
+
+        return undefined;
+    }
+
     const app = Vue.createApp({
         data() {
             return {
                 // baseUrl: "ws://192.168.1.46/api/weld",
                 // deviceId: '20230926001',
-                baseUrl: "http://127.0.0.1:9901",
+                baseUrl: getUrlParam(window.location.href, 'serviceUrl'),
                 condition: {},
                 columns: [
                     {
@@ -290,7 +308,7 @@
             }
         },
         created() {
-            this.page()
+            this.page();
         },
         methods: {
             onPageNumChange(pageNum) {
@@ -312,7 +330,7 @@
                 this.search();
             },
             page() {
-                const url = this.baseUrl + '/taskLog/findByPage';
+                const url = this.baseUrl + 'taskLog/findByPage';
                 const data = {
                     args: JSON.parse(JSON.stringify(this.condition)),
                     pageNum: this.pageArgs.pageNum,

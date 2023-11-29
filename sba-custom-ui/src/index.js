@@ -98,7 +98,7 @@ SBA.use({
       component: taskLogEndpoint,
       label: 'TaskLog',
       order: 1000,
-      isEnabled: ({instance}) => instance.hasEndpoint('threadPool') // <2>
+      isEnabled: ({instance}) => instance.hasEndpoint('taskLog') // <2>
     });
   }
 });
