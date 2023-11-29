@@ -1,0 +1,19 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: sba-server
+---
+spring:
+  profiles: dev
+  cloud:
+    nacos:
+      discovery:
+#        group: local
+        group: DEFAULT_GROUP
+        server-addr: 192.168.1.46:8848
+        username: nacos
+        password: nacos
+        metadata:
+          user.name: ${spring.security.user.name}
+          user.password: ${spring.security.user.password}

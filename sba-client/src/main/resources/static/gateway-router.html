@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>websocket test</title>
+    <style>
+        #console {
+            font-family: Consolas;
+            font-size: 13px;
+            background: #000;
+            color: limegreen;
+            width: 800px;
+            height: 600px;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div id="console"></div>
+<script>
+    let baseUrl = "127.0.0.1:8080/gr";
+    // let baseUrl = "192.168.1.46:9901";
+    // let baseUrl = "192.168.1.46/api/weld";
+    // 设备编号（主键）
+    let deviceId = 484;
+    let webSocketUrl = "ws://" + baseUrl + "/websocket/device/" + deviceId;
+        // +"?Authorization=Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaW5mbyI6eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlSWQiOjEsImdyb3VwSWQiOjEsImZpcm1JZCI6MSwiZmlybSI6bnVsbCwiZGVwYXJ0bWVudElkIjozNywiZGVwYXJ0bWVudENvZGUiOiIxLTM3LSIsImRlcGFydG1lbnROYW1lIjoi5LqR5bmz5Y-wIiwiYXV0aG9yaXR5Q29kZXMiOm51bGwsIm9wZW5JZCI6bnVsbCwidGltZXN0YW1wIjowLCJkZXYiOnRydWUsIm9wcyI6ZmFsc2UsImZpcm1NYW5hZ2VyIjpmYWxzZSwic2lrc2hyIjpmYWxzZSwicGxhdGZvcm1NYW5hZ2VyIjpmYWxzZX0sImlhdCI6MTY3NzQ2NTQ5NCwiZXhwIjoxNzcyMDczNDk0fQ.bHOTmelaRujo37Mqv5oK6MEWpE_NZAN-fJ08lNAgSQzPFOwcw4eHEXat33CYvPRm3O24_mO8HoS46zGxrPNBog";
+    let websocket;
+
+    connect();
+
+    function connect() {
+        websocket = new WebSocket(webSocketUrl);
+        websocket.onopen = function (e) {
+            console.log('connected ')
+            sendData()
+        };
+
+        websocket.onmessage = function (event) {
+            let data = event.data;
+            console.log(data);
+            append(data);
+        };
+
+        websocket.onclose = function (ev) {
+            append("【connection closed】 code=:" + ev.code + ";  reason=" + ev.reason + ";   wasclean=" + ev.wasClean);
+        }
+    }
+
+    function append(message) {
+        let console = document.getElementById("console");
+        console.innerHTML += message + " <br/>----------------------------------<br/><br/>";
+        console.scrollTop = console.scrollHeight;
+    }
+
+    function sendData() {
+        setInterval(() => {
+            let data = 'hello'
+            websocket.send(data)
+        }, 1000);
+    }
+
+</script>
+</body>
+</html>

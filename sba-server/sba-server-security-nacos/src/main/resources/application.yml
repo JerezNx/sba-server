@@ -1,0 +1,30 @@
+server:
+  port: 9001
+spring:
+  security:
+    user:
+      name: "serverUser"
+      password: "serverPassword"
+
+default:
+  header:
+    token: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaW5mbyI6eyJ1c2VySWQiOjEsInVzZXJuYW1lIjpudWxsLCJyb2xlSWQiOjEsImdyb3VwSWQiOjEsImZpcm1JZCI6MSwiZGV2Ijp0cnVlLCJvcHMiOmZhbHNlLCJwbGF0Zm9ybU1hbmFnZXIiOmZhbHNlLCJmaXJtTWFuYWdlciI6ZmFsc2UsInNpa3NociI6ZmFsc2V9LCJpYXQiOjE2MTA5NTkyMzYsImV4cCI6MTkyNjMxOTIzNn0.GL-2OUUDsowPMbcaJ2ea8i7C4HakyF8OcVOvrG3IR4QWsBWhq2CIcE0DFps-1ZSr0HE6ad-aiVrCB9X7JPtGbw
+management:
+  endpoint:
+    health:
+      show-details: ALWAYS
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  health:
+    mail:
+      enabled: false
+
+#  boot:
+#    admin:
+#      client:
+#        instance:
+#          metadata:
+#            user.name: "serverUser"
+#            user.password: "serverPassword"
