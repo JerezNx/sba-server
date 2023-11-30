@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "echarts": "^4.8.0",
-    "element-ui": "2.15.14"
+    "element-ui": "2.15.14",
+    "view-design": "^4.7.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.4.1",

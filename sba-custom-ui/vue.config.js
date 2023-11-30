@@ -42,6 +42,12 @@ module.exports = {
         ...options,
         hotReload: false
       }));
+    // 配置font字体无论多大，都打成base64，否则iview font加载不了
+    config.module.rule('fonts').use('url-loader')
+        .tap(options => ({
+          name: 'fonts/[name].[hash:8].[ext]',
+          limit: 0
+        }))
     config.plugins.delete('html');
     config.plugins.delete('preload');
     config.plugins.delete('prefetch');

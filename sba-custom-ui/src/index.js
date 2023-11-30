@@ -19,6 +19,7 @@ import custom from './custom/custom';
 import customEndpoint from './custom/custom-endpoint';
 import threadpoolEndpoint from './threadpool/threadpool-endpoint.vue';
 import taskLogEndpoint from './task-log/task-log-endpoint.vue';
+import taskLogEndpointIframe from './task-log/task-log-endpoint-iframe.vue';
 import demoEndpoint from './demo/demo-endpoint.vue';
 
 // import {Button} from 'element-ui';
@@ -35,6 +36,11 @@ const installElementUI = (vue) => {
   const ElementUI = () => import('element-ui');
   import('element-ui/lib/theme-chalk/index.css');
   vue.use(ElementUI);
+
+  const ViewUI = () => import('view-design');
+  // 这里好像还是加载不了
+  import('view-design/dist/styles/iview.css');
+  vue.use(ViewUI);
 }
 
 // tag::customization-ui-toplevel[]
@@ -103,6 +109,20 @@ SBA.use({
   }
 });
 
+SBA.use({
+  async install({viewRegistry, vue}) {
+    installElementUI(vue);
+    viewRegistry.addView({
+      name: 'instances/taskLogIframe',
+      parent: 'instances', // <1>
+      path: 'taskLogIframe',
+      component: taskLogEndpointIframe,
+      label: 'TaskLogIframe',
+      order: 1000,
+      isEnabled: ({instance}) => instance.hasEndpoint('taskLog') // <2>
+    });
+  }
+});
 
 // SBA.use({
 //   async install({viewRegistry, vue}) {
