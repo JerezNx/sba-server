@@ -78,7 +78,7 @@
 
       <Modal
           v-model="showErrorModal"
-          title="执行失败原因"
+          title="执行信息"
           width="60"
           footer-hide
       >
@@ -264,19 +264,26 @@ export default {
     this.page();
   },
   methods: {
-    async getThreadPool() {
+    async page() {
       const params = {
-        // args: JSON.parse(JSON.stringify(this.condition)),
+        args: JSON.stringify(this.condition),
         pageNum: this.pageArgs.pageNum,
         pageSize: this.pageArgs.pageSize
       };
       const token = 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaW5mbyI6eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlSWQiOjEsImdyb3VwSWQiOjEsImZpcm1JZCI6MSwiZmlybSI6bnVsbCwiZGVwYXJ0bWVudElkIjozNywiZGVwYXJ0bWVudENvZGUiOiIxLTM3LSIsImRlcGFydG1lbnROYW1lIjoi5LqR5bmz5Y-wIiwiYXV0aG9yaXR5Q29kZXMiOm51bGwsIm9wZW5JZCI6bnVsbCwidGltZXN0YW1wIjowLCJkZXYiOnRydWUsIm9wcyI6ZmFsc2UsImZpcm1NYW5hZ2VyIjpmYWxzZSwic2lrc2hyIjpmYWxzZSwicGxhdGZvcm1NYW5hZ2VyIjpmYWxzZX0sImlhdCI6MTY3NzQ2NTQ5NCwiZXhwIjoxNzcyMDczNDk0fQ.bHOTmelaRujo37Mqv5oK6MEWpE_NZAN-fJ08lNAgSQzPFOwcw4eHEXat33CYvPRm3O24_mO8HoS46zGxrPNBog';
-      const response = await this.instance.axios.get('actuator/taskLog', {params}, {
-        headers: {
-          'Authorization': token
-        }
-      }); //<2>
-      this.taskLogs = response.data;
+      try {
+        const response = await this.instance.axios.get('actuator/taskLog', {params}, {
+          headers: {
+            'Authorization': token
+          }
+        }); //<2>
+        this.dataList = response.data.list;
+        this.pageArgs.pageNum = response.data.pageNum;
+        this.pageArgs.pageSize = response.data.pageSize;
+        this.pageArgs.total = response.data.total;
+      } catch (e) {
+        this.$Message.error('查询失败')
+      }
     },
 
     onPageNumChange(pageNum) {
@@ -297,7 +304,7 @@ export default {
       this.searchDate = [];
       this.search();
     },
-    page() {
+    pagePost() {
       const url = this.serviceUrl + 'taskLog/findByPage';
       const data = {
         args: JSON.parse(JSON.stringify(this.condition)),
@@ -308,7 +315,6 @@ export default {
         data.args.startDate = formatDate(this.searchDate[0]);
         data.args.endDate = formatDate(this.searchDate[1]);
       }
-
       this.instance.axios.post(url, data, {
         headers: {
           'Content-Type': 'application/json',
@@ -324,7 +330,6 @@ export default {
           });
     },
     showErrorMsg(errorMsg) {
-      console.log(errorMsg)
       if (errorMsg) {
         this.errorMsg = errorMsg;
         this.showErrorModal = true;

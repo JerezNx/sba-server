@@ -15,21 +15,17 @@
   -->
 
 <template>
-  <div class="thread-pool">
-    <el-row :gutter="20">
-      <el-col :span="8" v-for="(threadPool, index) in threadPools" :key="index">
-        <ThreadpoolCard :thread-pool="threadPool"></ThreadpoolCard>
-      </el-col>
-    </el-row>
+  <div class="http-trace">
+    <div :span="8" v-for="(trace, index) in traces" :key="index">
+      {{trace}}
+    </div>
   </div>
 </template>
 
 <script>
-import ThreadpoolCard from "@/threadpool/threadpool-card.vue";
 
 export default {
   components: {
-    ThreadpoolCard,
   },
   props: {
     instance: { //<1>
@@ -38,19 +34,18 @@ export default {
     }
   },
   data: () => ({
-    threadPools: {}
+    traces: {}
   }),
   async created() {
-    await this.getThreadPool();
-    setInterval(this.getThreadPool, 1000)
+    await this.getHttptrace();
+    setInterval(this.getHttptrace, 1000)
   },
   mounted() {
   },
   methods: {
-    async getThreadPool() {
-      // http://127.0.0.1:9001/instances/173dc489c731/actuator/httptrace
-      const response = await this.instance.axios.get('actuator/threadPool'); //<2>
-      this.threadPools = response.data;
+    async getHttptrace() {
+      const response = await this.instance.axios.get('actuator/httptrace'); //<2>
+      this.traces = response.traces;
     }
   },
 };

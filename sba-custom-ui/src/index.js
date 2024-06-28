@@ -21,6 +21,7 @@ import threadpoolEndpoint from './threadpool/threadpool-endpoint.vue';
 import taskLogEndpoint from './task-log/task-log-endpoint.vue';
 import taskLogEndpointIframe from './task-log/task-log-endpoint-iframe.vue';
 import demoEndpoint from './demo/demo-endpoint.vue';
+import httptraceEndpoint from './views/web/httptrace-endpoint.vue';
 
 // import {Button} from 'element-ui';
 // import ElementUI from 'element-ui';
@@ -109,20 +110,20 @@ SBA.use({
   }
 });
 
-SBA.use({
-  async install({viewRegistry, vue}) {
-    installElementUI(vue);
-    viewRegistry.addView({
-      name: 'instances/taskLogIframe',
-      parent: 'instances', // <1>
-      path: 'taskLogIframe',
-      component: taskLogEndpointIframe,
-      label: 'TaskLogIframe',
-      order: 1000,
-      isEnabled: ({instance}) => instance.hasEndpoint('taskLog') // <2>
-    });
-  }
-});
+// SBA.use({
+//   async install({viewRegistry, vue}) {
+//     installElementUI(vue);
+//     viewRegistry.addView({
+//       name: 'instances/taskLogIframe',
+//       parent: 'instances', // <1>
+//       path: 'taskLogIframe',
+//       component: taskLogEndpointIframe,
+//       label: 'TaskLogIframe',
+//       order: 1000,
+//       isEnabled: ({instance}) => instance.hasEndpoint('taskLog') // <2>
+//     });
+//   }
+// });
 
 // SBA.use({
 //   async install({viewRegistry, vue}) {
@@ -138,3 +139,17 @@ SBA.use({
 //     });
 //   }
 // });
+SBA.use({
+  async install({viewRegistry, vue}) {
+    installElementUI(vue);
+    viewRegistry.addView({
+      name: 'instances/myHttptrace',
+      parent: 'instances', // <1>
+      path: 'myHttptrace',
+      component: httptraceEndpoint,
+      label: 'Http Traces',
+      order: 1000,
+      // isEnabled: ({instance}) => instance.hasEndpoint('httptrace') // <2>
+    });
+  }
+});
